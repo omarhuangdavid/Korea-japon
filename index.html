@@ -1,0 +1,708 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.5">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="es"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Registro de Gastos de Viaje Detallado v3&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif; /* Fuente Principal */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Estilo para items comprados (solo descripción tachada) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.item-purchased .item-description {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-decoration: line-through;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #9ca3af; /* gray-400 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Ocultar detalles de compra por defecto */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.hidden-details {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Mostrar detalles cuando el checkbox está marcado */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.item-checkbox:checked ~ .purchase-details {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">         </span>.item-checkbox:checked ~ .purchase-details input,</p>
+<p class="p1"><span class="Apple-converted-space">         </span>.item-checkbox:checked ~ .purchase-details select {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>visibility: visible;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>opacity: 1;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Estilo para la sección de notas (oculta por defecto) */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.notes-section {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f9fafb; /* gray-50 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-top: 1px solid #e5e7eb; /* gray-200 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 0 0 8px 8px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Mostrar notas cuando el contenedor tiene la clase 'notes-visible' */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.notes-visible .notes-section {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Contenedor principal centrado */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.main-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-width: 1000px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-left: auto;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-right: auto;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Animación para el botón de notas */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.toggle-notes-btn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 0.2s ease-in-out;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.notes-visible .toggle-notes-btn {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>transform: rotate(180deg); /* Gira la flecha */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Contenedor del mapa responsivo */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.map-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding-top: 56.25%; /* Aspect Ratio 16:9 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 2rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.map-container iframe {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>left: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>bottom: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>right: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Estilos para el formulario de añadir gasto */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#add-expense-form {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f8f9fa;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #dee2e6;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 0.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 2rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 2rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 2px 4px rgba(0,0,0,0.05);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#add-expense-form label {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 0.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #495057;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#add-expense-form input[type="text"],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#add-expense-form input[type="date"],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#add-expense-form input[type="number"],</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#add-expense-form select {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.75rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #ced4da;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 0.375rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 1rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">         </span>#add-expense-form input:focus,</p>
+<p class="p1"><span class="Apple-converted-space">         </span>#add-expense-form select:focus {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>border-color: #86b7fe;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>outline: 0;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);</p>
+<p class="p1"><span class="Apple-converted-space">         </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#add-expense-form button {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.75rem 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #0d6efd; /* Azul Bootstrap */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 0.375rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: background-color 0.2s ease;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#add-expense-form button:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #0b5ed7;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Mensajes de estado del formulario */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#form-message {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 1rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.75rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 0.375rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.message-success {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #d1e7dd; /* Verde Bootstrap */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #0f5132;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #badbcc;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">         </span>.message-error {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f8d7da; /* Rojo Bootstrap */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #842029;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #f5c2c7;</p>
+<p class="p1"><span class="Apple-converted-space">         </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="bg-gray-100 p-4 md:p-8"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="main-container bg-white p-6 rounded-lg shadow-xl"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1 class="text-2xl md:text-3xl font-bold mb-6 text-center text-gray-800"&gt;Registro de Gastos - Corea y Japón&lt;/h1&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="map-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>&lt;iframe</p>
+<p class="p1"><span class="Apple-converted-space">                </span>src="https://www.google.com/maps/d/embed?mid=1_EXAMPLE_MAP_ID_REPLACE_ME"</p>
+<p class="p1"><span class="Apple-converted-space">                </span>allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/iframe&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="balance-summary" class="mb-8 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 grid grid-cols-1 md:grid-cols-3 gap-4 text-center shadow"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3 class="text-lg font-semibold text-blue-800"&gt;Pagado por Marian:&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p id="marian-total" class="text-xl font-bold text-blue-600"&gt;$0.00 USD&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3 class="text-lg font-semibold text-green-800"&gt;Pagado por Omar:&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p id="omar-total" class="text-xl font-bold text-green-600"&gt;$0.00 USD&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3 class="text-lg font-semibold text-gray-800"&gt;Gasto Total Registrado:&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p id="grand-total" class="text-xl font-bold text-gray-600"&gt;$0.00 USD&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">         </span>&lt;div class="mb-6 p-3 bg-yellow-50 border border-yellow-300 rounded-lg text-sm text-yellow-800"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h4 class="font-semibold mb-1"&gt;Nota sobre el Japan Rail Pass (JR Pass):&lt;/h4&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;El JR Pass puede ser conveniente si planeas usar mucho los trenes JR, incluido el Shinkansen entre ciudades. Compara el costo total de los trayectos individuales que harás (ver notas en trenes) con el precio del JR Pass para tu duración (7, 14 o 21 días) para decidir si te conviene comprarlo. Los precios del JR Pass varían y deben verificarse en el sitio oficial antes de comprar.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="add-expense-form"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3 class="text-lg font-semibold mb-4 text-gray-700"&gt;Añadir Nuevo Gasto&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="grid grid-cols-1 md:grid-cols-2 gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;label for="new-expense-desc"&gt;Descripción:&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="new-expense-desc" placeholder="Ej: Cena en Myeongdong"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;label for="new-expense-date"&gt;Fecha:&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="date" id="new-expense-date"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;label for="new-expense-cost"&gt;Costo (USD):&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="number" id="new-expense-cost" placeholder="Ej: 25.50" min="0" step="0.01"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;label for="new-expense-payer"&gt;Pagado por:&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;select id="new-expense-payer"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="" disabled selected&gt;Selecciona quién pagó&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="Marian"&gt;Marian&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="Omar"&gt;Omar&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;div class="md:col-span-2"&gt; &lt;label for="new-expense-category"&gt;Categoría:&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;select id="new-expense-category"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="" disabled selected&gt;Selecciona categoría&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="Comida"&gt;Comida&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="Alojamiento"&gt;Alojamiento&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="Transporte Local"&gt;Transporte Local&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="Entrada"&gt;Entrada/Actividad&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="Souvenir"&gt;Souvenir&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="Compras"&gt;Compras&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;option value="Otros"&gt;Otros&lt;/option&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/select&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="add-expense-button" class="mt-4"&gt;Añadir Gasto&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="form-message" class="mt-4" style="display: none;"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2 class="text-xl font-semibold mb-4 text-gray-700"&gt;Lista de Gastos y Actividades (Ordenados por Fecha)&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="expense-list" class="space-y-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt; &lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Datos Iniciales del Itinerario (Gastos Principales Planificados) ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let itineraryItems = [</p>
+<p class="p1"><span class="Apple-converted-space">           </span>// Vuelos (Fechas basadas en tu itinerario corregido)</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 1, date: "2025-11-11", description: "Vuelo AC99 BOG-YUL", purchased: false, cost: 0, payer: null, category: 'Vuelo', notes: "Inicio del viaje desde Bogotá." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 2, date: "2025-11-12", description: "Vuelo AC7773/AC061 YUL-ICN", purchased: false, cost: 0, payer: null, category: 'Vuelo', notes: "Vuelo de conexión a Seúl vía Toronto." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 15, date: "2025-11-18", description: "Vuelo Busan-Jeju (PUS-CJU)", purchased: false, cost: 0, payer: null, category: 'Vuelo', notes: "Vuelo doméstico a la Isla de Jeju. Aerolíneas comunes: Jeju Air, Jin Air, T'way Air, Air Busan. Reservar con antelación." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 20, date: "2025-11-20", description: "Vuelo Jeju-Osaka (CJU-KIX)", purchased: false, cost: 0, payer: null, category: 'Vuelo', notes: "Vuelo internacional a Japón (Osaka). Aerolíneas comunes: Peach, Jetstar Japan. Reservar con antelación." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 33, date: "2025-11-28", description: "Vuelo AC 010 NRT-YYZ", purchased: false, cost: 0, payer: null, category: 'Vuelo', notes: "Vuelo de regreso desde Tokio (Narita) a Toronto." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>// Transporte Terrestre Principal</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 3, date: "2025-11-13", description: "Traslado ICN-Seúl", purchased: false, cost: 0, payer: null, category: 'Transporte', notes: "Opciones: AREX Express (rápido, directo a Seoul Station, ~9,500 KRW), AREX All Stop (más paradas, más barato, ~4,500 KRW), Bus Limusina (cómodo, directo a zonas hoteleras, ~17,000 KRW), Taxi (más caro, ~60,000+ KRW)." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 8, date: "2025-11-16", description: "KTX Seúl-Gyeongju", purchased: false, cost: 0, payer: null, category: 'Transporte', notes: "Tren bala desde Seoul Station a Singyeongju Station (a las afueras de Gyeongju). Duración: ~2 horas. Costo aprox: 50,000 KRW. Reservar en Korail." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 13, date: "2025-11-17", description: "KTX Gyeongju-Busan", purchased: false, cost: 0, payer: null, category: 'Transporte', notes: "Tren bala desde Singyeongju Station a Busan Station. Duración: ~30-40 min. Costo aprox: 11,000 - 17,000 KRW. Reservar en Korail." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 16, date: "2025-11-19", description: "Alquiler Coche Jeju", purchased: false, cost: 0, payer: null, category: 'Transporte', notes: "Recomendado para explorar la isla con flexibilidad. Se necesita Permiso de Conducir Internacional (IDP). Costo aprox: 40,000 - 70,000 KRW/día + gasolina. Alternativas: Autobús turístico, taxi." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 21, date: "2025-11-20", description: "JR Haruka Express KIX-Kioto", purchased: false, cost: 0, payer: null, category: 'Transporte', notes: "Tren directo desde el aeropuerto de Kansai (KIX) a Kyoto Station. Duración: ~75 min.", costWithJRPass: 0, costWithoutJRPass: 3000 }, // Costo aprox en JPY</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 30, date: "2025-11-24", description: "Shinkansen Kioto-Tokio", purchased: false, cost: 0, payer: null, category: 'Transporte', notes: "Tren bala desde Kyoto Station a Tokyo Station o Shinagawa Station. Duración: ~2.5 horas (Nozomi) o ~3 horas (Hikari). Nozomi no está cubierto por JR Pass estándar.", costWithJRPass: 0, costWithoutJRPass: 14000 }, // Costo aprox en JPY (asiento reservado)</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 32, date: "2025-11-28", description: "Narita Express Tokio-NRT", purchased: false, cost: 0, payer: null, category: 'Transporte', notes: "Tren directo desde estaciones principales de Tokio (Tokyo, Shinjuku, Shibuya, etc.) al Aeropuerto de Narita (NRT). Duración: ~60-90 min.", costWithJRPass: 0, costWithoutJRPass: 3000 }, // Costo aprox en JPY</p>
+<p class="p1"><span class="Apple-converted-space">          </span>// Entradas y Tours</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 4, date: "2025-11-14", description: "Entrada Palacio Gyeongbokgung", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "El palacio real más grande y principal de Seúl. Ver la ceremonia del cambio de guardia (10:00 y 14:00). Plan: Explorar los patios, salones principales y jardines. Cerca de Bukchon Hanok Village." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 5, date: "2025-11-15", description: "Tour DMZ", purchased: false, cost: 0, payer: null, category: 'Tour', notes: "Excursión a la Zona Desmilitarizada, la frontera entre Corea del Norte y Corea del Sur. Incluye visitas al JSA (Área de Seguridad Conjunta - si está disponible), túneles de infiltración y observatorios. Requiere reserva anticipada y pasaporte. Es una experiencia histórica y tensa." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 7, date: "2025-11-15", description: "Entrada N Seoul Tower", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Torre icónica en la montaña Namsan con vistas panorámicas de 360° de Seúl. Subir en teleférico o autobús. Popular por los 'candados del amor'. Mejor al atardecer/noche." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 9, date: "2025-11-16", description: "Entrada Parque Tumuli", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Parque en Gyeongju que alberga grandes túmulos funerarios cubiertos de hierba de los gobernantes del Reino de Silla. Destaca la Tumba Cheonmachong (abierta al público con réplicas de artefactos). Paseo tranquilo." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 10, date: "2025-11-16", description: "Entrada Observatorio Cheomseongdae", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Uno de los observatorios astronómicos más antiguos de Asia Oriental, construido durante el Reino de Silla (siglo VII). Situado cerca del Parque Tumuli. Interesante estructura de piedra." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 11, date: "2025-11-17", description: "Entrada Templo Bulguksa", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Importante complejo de templos budistas en Gyeongju, Patrimonio de la Humanidad por la UNESCO. Arquitectura hermosa y significado histórico. Plan: Explorar los diferentes salones, pagodas (Dabotap y Seokgatap) y patios." },</p>
+<p class="p1"><span class="Apple-converted-space">           </span>{ id: 12, date: "2025-11-18", description: "Visita Gamcheon Culture Village", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Antiguo barrio en Busan transformado en un vibrante pueblo artístico con casas de colores, murales, esculturas y galerías. Plan: Perderse por sus callejones, seguir la ruta de los sellos, disfrutar las vistas. Entrada general gratuita, algunas atracciones internas pueden costar." }, // Cambiado a Visita, ya que la entrada es gratis</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 17, date: "2025-11-19", description: "Entrada Seongsan Ilchulbong", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Cono volcánico ('Pico del Amanecer') en la costa este de Jeju, Patrimonio de la Humanidad. Famoso por las vistas espectaculares al amanecer desde la cima (subida de ~20-30 min). También hay espectáculos de Haenyeo (mujeres buceadoras) en la base." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 18, date: "2025-11-19", description: "Entrada Cueva Manjanggul", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Uno de los tubos de lava más largos y mejor conservados del mundo, Patrimonio de la Humanidad. Se puede caminar 1 km dentro de la cueva para ver formaciones de lava únicas. Llevar calzado cómodo y algo de abrigo (la cueva es fresca)." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 23, date: "2025-11-21", description: "Entrada Universal Studios Japan (USJ)", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Parque temático en Osaka. Principal atracción: Super Nintendo World (puede requerir entrada programada o pase aparte, verificar sistema actual). Otras áreas: Harry Potter, Jurassic Park, Minions. Plan: Llegar temprano, priorizar atracciones. Comprar entradas con antelación." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 25, date: "2025-11-22", description: "Entrada Kinkaku-ji", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Templo Zen Budista en Kioto, famoso por su Pabellón Dorado completamente cubierto de pan de oro, reflejándose en el estanque. Uno de los lugares más icónicos de Japón. Plan: Recorrer los jardines que rodean el pabellón." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 26, date: "2025-11-22", description: "Entrada Ryoan-ji", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Templo Zen en Kioto, mundialmente famoso por su jardín seco (karesansui) o jardín de rocas. Un espacio minimalista para la contemplación. El significado exacto de la disposición de las 15 rocas es objeto de debate. Plan: Sentarse a observar el jardín." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 27, date: "2025-11-23", description: "Entrada Kiyomizu-dera", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Templo budista famoso por su plataforma de madera que sobresale de la ladera, construida sin clavos, con vistas de Kioto. También conocido por la cascada Otowa. Ubicado en las colinas de Higashiyama. Plan: Visitar el templo y luego explorar las calles Sannenzaka y Ninenzaka." },</p>
+<p class="p1"><span class="Apple-converted-space">          </span>{ id: 28, date: "2025-11-23", description: "Visita Fushimi Inari-taisha", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "Santuario sintoísta dedicado a Inari, el dios del arroz. Famoso por sus miles de puertas torii rojas que forman senderos por la montaña. Entrada gratuita. Plan: Caminar por los senderos de toriis (se puede subir hasta la cima, ~2-3 horas ida y vuelta, o hacer un recorrido más corto)." }, // Entrada gratuita</p>
+<p class="p1"><span class="Apple-converted-space">           </span>{ id: 34, date: "2025-11-27", description: "Entrada Museo Nacional de Tokio", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "El museo más grande y antiguo de Japón, ubicado en el Parque Ueno. Alberga una vasta colección de arte y artefactos arqueológicos japoneses y asiáticos. Plan: Elegir una o dos galerías principales según interés (ej. Honkan - Galería Japonesa). Costo aprox: 1000 JPY." },</p>
+<p class="p1"><span class="Apple-converted-space">           </span>{ id: 35, date: "2025-11-27", description: "Visita Templo Senso-ji", purchased: false, cost: 0, payer: null, category: 'Entrada', notes: "El templo budista más antiguo y uno de los más significativos de Tokio, ubicado en Asakusa. Se accede a través de la puerta Kaminarimon y la calle comercial Nakamise-dori. Entrada gratuita al recinto del templo. Plan: Visitar el templo, pasear por Nakamise-dori." }, // Entrada gratuita</p>
+<p class="p1"><span class="Apple-converted-space">        </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Referencias a Elementos del DOM ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const expenseListContainer = document.getElementById('expense-list');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const marianTotalEl = document.getElementById('marian-total');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const omarTotalEl = document.getElementById('omar-total');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const grandTotalEl = document.getElementById('grand-total');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const addExpenseButton = document.getElementById('add-expense-button');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const formMessageEl = document.getElementById('form-message');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Funciones ---</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Guarda el estado actual de itineraryItems en localStorage.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function saveData() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>localStorage.setItem('travelExpenses_v3', JSON.stringify(itineraryItems));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Carga el estado de itineraryItems desde localStorage, si existe.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Asegura que todos los items tengan IDs únicos después de cargar.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function loadData() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const savedData = localStorage.getItem('travelExpenses_v3');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (savedData) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>itineraryItems = JSON.parse(savedData);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ensureUniqueIds(); // Asegurar IDs únicos después de cargar o si es la primera vez</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Revisa todos los items y asigna un ID único si falta o está duplicado.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">         </span>function ensureUniqueIds() {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>let maxId = 0;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const existingIds = new Set();</p>
+<p class="p1"><span class="Apple-converted-space">             </span>itineraryItems.forEach(item =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>if (item.id !== undefined &amp;&amp; item.id !== null) {</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>if (existingIds.has(item.id)) {</p>
+<p class="p1"><span class="Apple-converted-space">                         </span>// ID duplicado, necesita uno nuevo</p>
+<p class="p1"><span class="Apple-converted-space">                         </span>item.id = generateNewId(maxId); // Pasar maxId actual para eficiencia</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                         </span>existingIds.add(item.id);</p>
+<p class="p1"><span class="Apple-converted-space">                         </span>maxId = Math.max(maxId, item.id);</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Item sin ID, necesita uno nuevo</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>item.id = generateNewId(maxId);</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>existingIds.add(item.id); // Añadir el ID (nuevo o existente validado) al set</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>maxId = Math.max(maxId, item.id); // Actualizar maxId rastreado</p>
+<p class="p1"><span class="Apple-converted-space">             </span>});</p>
+<p class="p1"><span class="Apple-converted-space">         </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Genera un nuevo ID único basado en el ID máximo actual + 1.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* @param {number} currentMaxId - El ID máximo conocido actualmente.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* @returns {number} Un nuevo ID único.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">         </span>function generateNewId(currentMaxId = -1) {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>if (currentMaxId === -1) {</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>currentMaxId = itineraryItems.reduce((max, item) =&gt; Math.max(max, item.id || 0), 0);</p>
+<p class="p1"><span class="Apple-converted-space">             </span>}</p>
+<p class="p1"><span class="Apple-converted-space">             </span>let newId = currentMaxId + 1;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>// Bucle de seguridad por si acaso (poco probable con incremento simple)</p>
+<p class="p1"><span class="Apple-converted-space">             </span>while (itineraryItems.some(item =&gt; item.id === newId)) {</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>newId++;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>}</p>
+<p class="p1"><span class="Apple-converted-space">             </span>return newId;</p>
+<p class="p1"><span class="Apple-converted-space">         </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Calcula los totales pagados por cada persona y el total general,</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* y actualiza los elementos correspondientes en el DOM.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateBalance() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let marianTotal = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let omarTotal = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let grandTotal = 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>itineraryItems.forEach(item =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Sumar solo si está marcado como comprado, tiene costo &gt; 0 y un pagador asignado</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>if (item.purchased &amp;&amp; item.cost &gt; 0 &amp;&amp; item.payer) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const cost = parseFloat(item.cost) || 0;</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>grandTotal += cost;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (item.payer === 'Marian') {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>marianTotal += cost;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>} else if (item.payer === 'Omar') {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>omarTotal += cost;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Función para formatear números como moneda USD</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const formatCurrency = (amount) =&gt; amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Actualizar el texto en los elementos del resumen</p>
+<p class="p1"><span class="Apple-converted-space">            </span>marianTotalEl.textContent = formatCurrency(marianTotal);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>omarTotalEl.textContent = formatCurrency(omarTotal);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grandTotalEl.textContent = formatCurrency(grandTotal);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Formatea las notas de un item para mostrarlas en la sección desplegable.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Incluye información especial para costos de transporte con/sin JR Pass.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* @param {object} item - El objeto del item del itinerario.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* @returns {string} HTML formateado para las notas.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function formatNotes(item) {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>// Si es un item añadido manualmente, mostrar solo la categoría (o una nota simple)</p>
+<p class="p1"><span class="Apple-converted-space">             </span>if (item.isManualEntry) {</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>return `&lt;p class="text-sm text-gray-600"&gt;Categoría: ${item.category || 'No especificada'}&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Lógica para items predefinidos</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let notesHTML = `&lt;p class="text-sm text-gray-600"&gt;${item.notes || 'No hay notas adicionales.'}&lt;/p&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Añadir detalles de costo JR Pass si existen</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (item.costWithoutJRPass !== undefined) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesHTML += `&lt;div class="mt-2 pt-2 border-t border-gray-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;p class="text-sm font-semibold text-gray-700"&gt;Costo Transporte (Aprox JPY):&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;ul class="list-disc list-inside text-sm text-gray-600"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;li&gt;Sin JR Pass: ${item.costWithoutJRPass.toLocaleString('ja-JP')} JPY&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>&lt;li&gt;Con JR Pass: ${ (item.costWithJRPass !== undefined &amp;&amp; item.costWithJRPass === 0) ? 'Cubierto (si activo y elegible)' : (item.costWithJRPass ? item.costWithJRPass.toLocaleString('ja-JP') + ' JPY' : 'N/A') }&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                             </span>&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return notesHTML;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Muestra un mensaje temporal (éxito o error) en el área designada del formulario.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* @param {string} message - El mensaje a mostrar.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* @param {boolean} isSuccess - true para mensaje de éxito (verde), false para error (rojo).</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showFormMessage(message, isSuccess = true) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>formMessageEl.textContent = message;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>formMessageEl.className = `mt-4 ${isSuccess ? 'message-success' : 'message-error'}`; // Aplica clase CSS para color</p>
+<p class="p1"><span class="Apple-converted-space">            </span>formMessageEl.style.display = 'block'; // Muestra el mensaje</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Oculta el mensaje después de 3 segundos</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>formMessageEl.style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 3000);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Limpia todos los campos del formulario de añadir nuevo gasto.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function clearAddExpenseForm() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('new-expense-desc').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('new-expense-date').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('new-expense-cost').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('new-expense-payer').selectedIndex = 0; // Resetea el select</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('new-expense-category').selectedIndex = 0; // Resetea el select</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Renderiza la lista completa de gastos en el contenedor 'expense-list'.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Ordena los items por fecha antes de renderizar.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* Añade event listeners a los elementos interactivos de cada item.</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderExpenseList() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>expenseListContainer.innerHTML = ''; // Limpiar contenedor antes de re-renderizar</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// *** Ordenar el array itineraryItems por fecha (ascendente) ***</p>
+<p class="p1"><span class="Apple-converted-space">            </span>itineraryItems.sort((a, b) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Tratar fechas nulas o inválidas poniéndolas al final</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const dateA = a.date ? new Date(a.date + 'T00:00:00') : null; // Añadir T00:00:00 para evitar problemas de zona horaria al comparar solo fechas</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const dateB = b.date ? new Date(b.date + 'T00:00:00') : null;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (!dateA &amp;&amp; !dateB) return 0; // Ambos sin fecha, mantener orden relativo</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (!dateA) return 1;<span class="Apple-converted-space">          </span>// 'a' sin fecha va después que 'b' con fecha</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (!dateB) return -1; <span class="Apple-converted-space">        </span>// 'b' sin fecha va después que 'a' con fecha</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return dateA - dateB;<span class="Apple-converted-space">          </span>// Ordenar cronológicamente si ambas fechas son válidas</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// --- Crear y añadir elementos del DOM para cada item ---</p>
+<p class="p1"><span class="Apple-converted-space">            </span>itineraryItems.forEach((item) =&gt; { // No necesitamos el índice aquí ya que usamos IDs</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const itemWrapper = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Aplicar fondo verde si está comprado</p>
+<p class="p1"><span class="Apple-converted-space">                </span>itemWrapper.className = `item-wrapper border rounded-lg shadow-sm overflow-hidden ${item.purchased ? 'bg-green-50' : 'bg-white'}`;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>// Añadir clase para mostrar notas si estaba visible previamente</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>if (item.notesVisible) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>itemWrapper.classList.add('notes-visible');</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Contenedor principal del item (visible siempre)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const itemDiv = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>itemDiv.className = 'item-container p-4 flex flex-col md:flex-row md:items-center justify-between gap-4';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// --- Sección Izquierda: Checkbox, Fecha, Descripción ---</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const leftSection = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>leftSection.className = 'flex items-center space-x-3 flex-grow min-w-0'; // min-w-0 previene overflow</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Checkbox para marcar como comprado</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const checkbox = document.createElement('input');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checkbox.type = 'checkbox';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checkbox.checked = item.purchased;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checkbox.id = `item-${item.id}`; // ID único para el label</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checkbox.className = 'item-checkbox h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer flex-shrink-0';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checkbox.dataset.itemId = item.id; // Guardar ID del item para referencia en eventos</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Div para agrupar fecha y descripción</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const descriptionDiv = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>descriptionDiv.className = 'flex-grow min-w-0'; // min-w-0</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Span para la fecha</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const dateSpan = document.createElement('span');</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>// Formatear fecha en español (ej: 4 may. 2025) - Usar UTC para consistencia</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>dateSpan.textContent = item.date ? new Date(item.date + 'T00:00:00Z').toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }) : 'Sin fecha';</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>} catch (e) {</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>console.error("Error formateando fecha:", item.date, e);</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>dateSpan.textContent = 'Fecha inválida';</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>dateSpan.className = 'text-xs text-gray-500 block md:inline md:mr-2';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Label para la descripción (asociado al checkbox)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const label = document.createElement('label');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>label.htmlFor = `item-${item.id}`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>label.textContent = item.description;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Aplicar clase para tachar si está comprado y truncar texto largo</p>
+<p class="p1"><span class="Apple-converted-space">                </span>label.className = `item-description block text-gray-800 font-medium cursor-pointer truncate ${item.purchased ? 'item-purchased' : ''}`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>label.title = item.description; // Añadir tooltip con descripción completa</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>descriptionDiv.appendChild(dateSpan);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>descriptionDiv.appendChild(label);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Mostrar categoría si es una entrada manual</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (item.isManualEntry &amp;&amp; item.category) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const categorySpan = document.createElement('span');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>categorySpan.textContent = ` (${item.category})`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>categorySpan.className = 'text-xs text-purple-600 italic ml-1';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>descriptionDiv.appendChild(categorySpan);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>leftSection.appendChild(checkbox);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>leftSection.appendChild(descriptionDiv);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// --- Sección Derecha: Detalles de Compra, Botón Notas ---</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const rightSection = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>rightSection.className = 'flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-4 flex-shrink-0'; // Evita que se encoja</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Div para detalles de compra (costo, pagador) - Oculto si no está comprado</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const purchaseDetailsDiv = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>purchaseDetailsDiv.className = `purchase-details flex flex-col sm:flex-row items-start sm:items-center gap-2 mt-2 md:mt-0 ${item.purchased ? '' : 'hidden-details'}`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Input para el costo real</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const costInput = document.createElement('input');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>costInput.type = 'number';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>costInput.placeholder = 'Costo (USD)';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>costInput.value = item.cost &gt; 0 ? item.cost : '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>costInput.min = '0';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>costInput.step = '0.01';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>costInput.className = 'cost-input p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm w-full sm:w-28'; // Ancho fijo</p>
+<p class="p1"><span class="Apple-converted-space">                </span>costInput.dataset.itemId = item.id; // Guardar ID del item</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Select para el pagador</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const payerSelect = document.createElement('select');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>payerSelect.className = 'payer-select p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm w-full sm:w-32'; // Ancho fijo</p>
+<p class="p1"><span class="Apple-converted-space">                </span>payerSelect.dataset.itemId = item.id; // Guardar ID del item</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Opciones del select (Default, Marian, Omar)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const optionDefault = document.createElement('option');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionDefault.value = "";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionDefault.textContent = "Quién pagó?";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionDefault.disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionDefault.selected = !item.payer;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>payerSelect.appendChild(optionDefault);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const optionMarian = document.createElement('option');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionMarian.value = "Marian";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionMarian.textContent = "Marian";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionMarian.selected = item.payer === 'Marian';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>payerSelect.appendChild(optionMarian);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const optionOmar = document.createElement('option');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionOmar.value = "Omar";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionOmar.textContent = "Omar";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>optionOmar.selected = item.payer === 'Omar';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>payerSelect.appendChild(optionOmar);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>purchaseDetailsDiv.appendChild(costInput);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>purchaseDetailsDiv.appendChild(payerSelect);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Botón para mostrar/ocultar notas</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const toggleButton = document.createElement('button');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleButton.className = 'toggle-notes-btn p-2 text-gray-500 hover:text-blue-600 flex-shrink-0';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleButton.innerHTML = '&lt;i class="fas fa-chevron-down"&gt;&lt;/i&gt;'; // Icono Font Awesome</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleButton.dataset.itemId = item.id; // Guardar ID del item</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleButton.setAttribute('aria-label', 'Mostrar/Ocultar notas');</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>// Ocultar botón si no hay notas significativas (ej. items manuales sin notas)</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>if (item.isManualEntry &amp;&amp; !item.notes) { // O una lógica más robusta</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>toggleButton.style.visibility = 'hidden';</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>rightSection.appendChild(purchaseDetailsDiv);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>rightSection.appendChild(toggleButton);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// --- Sección de Notas (oculta por defecto) ---</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const notesDiv = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesDiv.className = 'notes-section px-4 pb-4'; // Estilos aplicados directamente</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesDiv.innerHTML = formatNotes(item); // Poblar con notas formateadas</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// --- Ensamblar el Item Completo ---</p>
+<p class="p1"><span class="Apple-converted-space">                </span>itemDiv.appendChild(leftSection); <span class="Apple-converted-space">  </span>// Añadir sección izquierda</p>
+<p class="p1"><span class="Apple-converted-space">                </span>itemDiv.appendChild(rightSection);<span class="Apple-converted-space">  </span>// Añadir sección derecha</p>
+<p class="p1"><span class="Apple-converted-space">                </span>itemWrapper.appendChild(itemDiv); <span class="Apple-converted-space">  </span>// Añadir contenedor principal al wrapper</p>
+<p class="p1"><span class="Apple-converted-space">                </span>itemWrapper.appendChild(notesDiv);<span class="Apple-converted-space">  </span>// Añadir sección de notas al wrapper</p>
+<p class="p1"><span class="Apple-converted-space">                </span>expenseListContainer.appendChild(itemWrapper); // Añadir el wrapper completo a la lista</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// --- Añadir Event Listeners (usando ID del item para encontrarlo después de ordenar) ---</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Función auxiliar para encontrar el índice del item en el array por su ID</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>const findItemIndexById = (id) =&gt; itineraryItems.findIndex(itm =&gt; itm.id === id);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Listener para el checkbox</p>
+<p class="p1"><span class="Apple-converted-space">                </span>checkbox.addEventListener('change', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const itemId = parseInt(e.target.dataset.itemId); // Obtener ID del item del dataset</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const idx = findItemIndexById(itemId); // Encontrar índice actual en el array</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (idx === -1) { console.error("Item not found for checkbox:", itemId); return; } // Seguridad</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const isChecked = e.target.checked;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>itineraryItems[idx].purchased = isChecked;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Si se desmarca, resetear costo y pagador (opcional, pero lógico)</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (!isChecked) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>itineraryItems[idx].cost = 0;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>itineraryItems[idx].payer = null;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>renderExpenseList(); // Re-renderizar para actualizar estado visual (fondo, tachado) y detalles</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>updateBalance(); <span class="Apple-converted-space">    </span>// Recalcular saldos</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>saveData();<span class="Apple-converted-space">          </span>// Guardar cambios</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Listener para el input de costo (actualiza en 'input', guarda en 'change')</p>
+<p class="p1"><span class="Apple-converted-space">                </span>costInput.addEventListener('input', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>const itemId = parseInt(e.target.dataset.itemId);</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>const idx = findItemIndexById(itemId);</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>if (idx === -1) { console.error("Item not found for cost input:", itemId); return; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const costValue = parseFloat(e.target.value) || 0;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>itineraryItems[idx].cost = costValue &gt;= 0 ? costValue : 0; // Asegurar que sea &gt;= 0</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>updateBalance(); // Actualizar saldos mientras se escribe</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>costInput.addEventListener('change', (e) =&gt; { // Guardar solo cuando se deja de editar el campo</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>saveData();</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Listener para el select de pagador</p>
+<p class="p1"><span class="Apple-converted-space">                </span>payerSelect.addEventListener('change', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const itemId = parseInt(e.target.dataset.itemId);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const idx = findItemIndexById(itemId);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (idx === -1) { console.error("Item not found for payer select:", itemId); return; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>itineraryItems[idx].payer = e.target.value; // Guardar el valor seleccionado</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>updateBalance(); // Actualizar saldos</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>saveData();<span class="Apple-converted-space">      </span>// Guardar cambios</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Listener para el botón de mostrar/ocultar notas</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleButton.addEventListener('click', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const button = e.currentTarget; // El botón que fue clickeado</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const itemId = parseInt(button.dataset.itemId);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const idx = findItemIndexById(itemId);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (idx === -1) { console.error("Item not found for toggle notes:", itemId); return; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const wrapper = button.closest('.item-wrapper'); // Encontrar el contenedor padre del item</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Alternar la clase 'notes-visible' en el wrapper</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const notesAreVisible = wrapper.classList.toggle('notes-visible');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Guardar el estado de visibilidad en el objeto del item</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>itineraryItems[idx].notesVisible = notesAreVisible;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>saveData(); // Guardar el nuevo estado de visibilidad</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}); // Fin del forEach</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} // Fin de renderExpenseList</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">         </span>// --- Event Listener para el botón de Añadir Gasto ---</p>
+<p class="p1"><span class="Apple-converted-space">         </span>addExpenseButton.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">             </span>// Obtener valores del formulario</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const descriptionInput = document.getElementById('new-expense-desc');</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const dateInput = document.getElementById('new-expense-date');</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const costInput = document.getElementById('new-expense-cost');</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const payerInput = document.getElementById('new-expense-payer');</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const categoryInput = document.getElementById('new-expense-category');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">             </span>const description = descriptionInput.value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const date = dateInput.value;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const cost = parseFloat(costInput.value) || 0;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const payer = payerInput.value;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const category = categoryInput.value;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">             </span>// Validación simple de campos requeridos</p>
+<p class="p1"><span class="Apple-converted-space">             </span>if (!description || !date || cost &lt;= 0 || !payer || !category) {</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>showFormMessage('Por favor, completa todos los campos correctamente.', false); // Mostrar mensaje de error</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>return; // Detener ejecución si falta información</p>
+<p class="p1"><span class="Apple-converted-space">             </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">             </span>// Crear nuevo objeto de gasto</p>
+<p class="p1"><span class="Apple-converted-space">             </span>const newExpense = {</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>id: generateNewId(), // Generar un ID único nuevo</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>date: date,</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>description: description,</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>purchased: true, // Marcar como comprado por defecto al añadir manualmente</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>cost: cost,</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>payer: payer,</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>category: category,</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>notes: null, // No hay notas detalladas predefinidas para items manuales</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>isManualEntry: true, // Marcar como entrada manual</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>notesVisible: false // Notas ocultas por defecto</p>
+<p class="p1"><span class="Apple-converted-space">             </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">             </span>// Añadir el nuevo gasto al array principal</p>
+<p class="p1"><span class="Apple-converted-space">             </span>itineraryItems.push(newExpense);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">             </span>// Guardar, actualizar balance, re-renderizar lista (que se ordenará) y limpiar formulario</p>
+<p class="p1"><span class="Apple-converted-space">             </span>saveData();</p>
+<p class="p1"><span class="Apple-converted-space">             </span>updateBalance();</p>
+<p class="p1"><span class="Apple-converted-space">             </span>renderExpenseList(); // La lista se re-renderizará ordenada por fecha</p>
+<p class="p1"><span class="Apple-converted-space">             </span>clearAddExpenseForm(); // Limpiar campos del formulario</p>
+<p class="p1"><span class="Apple-converted-space">             </span>showFormMessage('¡Gasto añadido con éxito!', true); // Mostrar mensaje de éxito</p>
+<p class="p1"><span class="Apple-converted-space">         </span>});</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- Inicialización de la Aplicación ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Cargar datos guardados (si existen) al iniciar</p>
+<p class="p1"><span class="Apple-converted-space">        </span>loadData();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Renderizar la lista inicial (ya ordenada por fecha)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>renderExpenseList();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Calcular y mostrar el balance inicial</p>
+<p class="p1"><span class="Apple-converted-space">        </span>updateBalance();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
